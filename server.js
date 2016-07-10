@@ -46,7 +46,17 @@ app.get('/api', function api_index(req, res) {
       {method: "GET", path: "/api/profile", description: "Data about me"}, // CHANGE ME
       {method: "POST", path: "/api/campsites", description: "E.g. Create a new campsite"} // CHANGE ME
     ]
-  })
+  });
+});
+
+app.get('/api/profile', function profile(req, res) {
+  res.json({
+    name: 'Mark Johnson',
+    github_link: 'https://github.com/markjohnson303',
+    github_profile_image: 'https://avatars2.githubusercontent.com/u/9029766?v=3&s=460',
+    current_city: 'Denver',
+    pets: ['none']
+  });
 });
 
 /**********
