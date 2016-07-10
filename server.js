@@ -11,7 +11,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
  * DATABASE *
  ************/
 
-// var db = require('./models');
+var db = require('./models');
 
 /**********
  * ROUTES *
@@ -37,10 +37,11 @@ app.get('/', function homepage(req, res) {
 app.get('/api', function api_index(req, res) {
   // TODO: Document all your api endpoints below
   res.json({
-    woops_i_has_forgot_to_document_all_my_endpoints: true, // CHANGE ME ;)
+    woops_i_has_forgot_to_document_all_my_endpoints: false, // CHANGE ME ;)
+    previous_key_is_funny: false,
     message: "Welcome to my personal api! Here's what you need to know!",
-    documentation_url: "https://github.com/example-username/express_self_api/README.md", // CHANGE ME
-    base_url: "http://YOUR-APP-NAME.herokuapp.com", // CHANGE ME
+    documentation_url: "https://github.com/markjohnson303/express-personal-api/blob/master/README.md",
+    base_url: "http://mj-api.herokuapp.com",
     endpoints: [
       {method: "GET", path: "/api", description: "Describes all available endpoints"},
       {method: "GET", path: "/api/profile", description: "Data about me"}, // CHANGE ME
@@ -56,6 +57,15 @@ app.get('/api/profile', function profile(req, res) {
     github_profile_image: 'https://avatars2.githubusercontent.com/u/9029766?v=3&s=460',
     current_city: 'Denver',
     pets: ['none']
+  });
+});
+
+// get all sites
+app.get('/api/campsites', function (req, res) {
+  // send all campsites as JSON response
+  db.Campsite.find(function(err, campsites){
+    if (err) { return console.log("index error: " + err); }
+    res.json(campsites);
   });
 });
 
