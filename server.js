@@ -42,10 +42,14 @@ app.get('/api', function api_index(req, res) {
     message: "Welcome to my personal api! Here's what you need to know!",
     documentation_url: "https://github.com/markjohnson303/express-personal-api/blob/master/README.md",
     base_url: "http://mj-api.herokuapp.com",
-    endpoints: [
+    general_endpoints: [
       {method: "GET", path: "/api", description: "Describes all available endpoints"},
       {method: "GET", path: "/api/profile", description: "Data about me"}, // CHANGE ME
       {method: "POST", path: "/api/campsites", description: "E.g. Create a new campsite"} // CHANGE ME
+    ],
+    fav_album_endpoints: [
+      {method: "GET", path: "/api/albums", description: "Returns an array of all favorite allbums"},
+      {method: "POST", path: "/api/albums", description: "E.g. Create a new album"} // CHANGE ME
     ]
   });
 });
@@ -76,12 +80,19 @@ app.post('/api/albums', function (req, res) {
   // add newAlbum to database
   newAlbum.save(function(err, book){
     if (err) { return console.log("create error: " + err); }
-    console.log("created ", newAlbum.title);
     res.json(newAlbum);
   });
 });
 
+// delete album
+app.delete('/api/albums/:id', function (req, res) {
+  // get book id from url params (`req.params`)
+  var albumId = req.params.id;
 
+  db.Album.findOneAndRemove({ _id: albumId }, function (err, deletedAlbum) {
+    res.json(deletedAlbum);
+  });
+});
 
 /**********
  * SERVER *
