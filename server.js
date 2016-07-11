@@ -60,12 +60,12 @@ app.get('/api/profile', function profile(req, res) {
   });
 });
 
-// get all sites
-app.get('/api/campsites', function (req, res) {
-  // send all campsites as JSON response
-  db.Campsite.find(function(err, campsites){
+// get all albums
+app.get('/api/albums', function (req, res) {
+  // send all albums as JSON response
+  db.Album.find(function(err, albums){
     if (err) { return console.log("index error: " + err); }
-    res.json(campsites);
+    res.json(albums);
   });
 });
 
