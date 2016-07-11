@@ -5,7 +5,7 @@ var express = require('express'),
 // parse incoming urlencoded form data
 // and populate the req.body object
 var bodyParser = require('body-parser');
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
 
 /************
  * DATABASE *
@@ -68,6 +68,20 @@ app.get('/api/albums', function (req, res) {
     res.json(albums);
   });
 });
+
+// create new album
+app.post('/api/albums', function (req, res) {
+  // create new album with form data (`req.body`)
+  var newAlbum = new db.Album(req.body);
+  // add newAlbum to database
+  newAlbum.save(function(err, book){
+    if (err) { return console.log("create error: " + err); }
+    console.log("created ", newAlbum.title);
+    res.json(newAlbum);
+  });
+});
+
+
 
 /**********
  * SERVER *
