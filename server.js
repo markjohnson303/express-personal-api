@@ -45,11 +45,13 @@ app.get('/api', function api_index(req, res) {
     general_endpoints: [
       {method: "GET", path: "/api", description: "Describes all available endpoints"},
       {method: "GET", path: "/api/profile", description: "Data about me"}, // CHANGE ME
-      {method: "POST", path: "/api/campsites", description: "E.g. Create a new campsite"} // CHANGE ME
     ],
     fav_album_endpoints: [
       {method: "GET", path: "/api/albums", description: "Returns an array of all favorite allbums"},
-      {method: "POST", path: "/api/albums", description: "E.g. Create a new album"} // CHANGE ME
+      {method: "GET", path: "/api/albums/:id", description: "Return an album by it's ID"},
+      {method: "POST", path: "/api/albums", description: "Create a new album with request body"},
+      {method: "PUT", path: "/api/albums/:id", description: "Update album by id with request body"},
+      {method: "DELETE", path: "/api/albums/:id", description: "Delete an album"},
     ]
   });
 });
@@ -73,14 +75,31 @@ app.get('/api/albums', function (req, res) {
   });
 });
 
+app.get('/api/albums/:id', function (req, res) {
+  // find one album by its id
+  db.Album.findById(req.params.id, function(err, album){
+    if (err) { return console.log("show error: " + err); }
+    res.json(album);
+  });
+});
+
 // create new album
 app.post('/api/albums', function (req, res) {
   // create new album with form data (`req.body`)
   var newAlbum = new db.Album(req.body);
   // add newAlbum to database
-  newAlbum.save(function(err, book){
+  newAlbum.save(function(err, album){
     if (err) { return console.log("create error: " + err); }
-    res.json(newAlbum);
+    res.json(album);
+  });
+});
+
+app.put('/api/albums/:id', function (req, res) {
+  var albumID = req.params.id;
+  var update = req.body;
+  db.Album.findOneAndUpdate({_id: albumID}, update, function(err, album){
+    if (err) { return console.log("create error: " + err); }
+    res.json(album);
   });
 });
 
